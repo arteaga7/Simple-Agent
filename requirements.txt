@@ -1,0 +1,9 @@
+fastapi
+uvicorn[standard]
+requests
+python-dotenv
+streamlit
+groq
+sqlalchemy
+psycopg[binary]
+pydantic-settings
