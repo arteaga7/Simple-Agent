@@ -1,14 +1,11 @@
 """Centralized settings, loaded from environment / .env via pydantic-settings."""
 from functools import lru_cache
-
 from pydantic_settings import BaseSettings, SettingsConfigDict
-
 from bot.prompts import SYSTEM_PROMPT as DEFAULT_SYSTEM_PROMPT
 
 
 class Settings(BaseSettings):
     """All runtime configuration. Values come from the environment or a local .env file."""
-
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
     # LLM (Groq, OpenAI-compatible)

@@ -1,19 +1,18 @@
 """Conversation persistence: load/append messages from the Postgres `messages` table."""
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session
-
 from bot.config import get_settings
 from bot.db.models import Message
 
 
 def load_messages(db: Session, session_id: str) -> list[dict]:
     """Return the full message history for a session in OpenAI/Groq format.
-
     On a brand-new session, returns just the system prompt (not yet persisted —
     it gets stored on the first `append_messages` call).
     """
     rows = db.scalars(
-        select(Message).where(Message.session_id == session_id).order_by(Message.seq)
+        select(Message).where(Message.session_id ==
+                              session_id).order_by(Message.seq)
     ).all()
     if rows:
         return [row.payload for row in rows]
