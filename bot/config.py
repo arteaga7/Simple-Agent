@@ -16,10 +16,10 @@ class Settings(BaseSettings):
     max_agent_iters: int = 5
 
     # Database
-    database_url: str = "postgresql+psycopg://chatbot:chatbot@localhost:5432/chatbot"
+    # database_url: str = "postgresql+psycopg://chatbot:chatbot@localhost:5432/chatbot"
 
     # Database for render.com
-    # database_url: str = os.getenv("DATABASE_URL")
+    database_url: str = os.getenv("DATABASE_URL")
 
     # Streamlit client -> API base URL
     api_url: str = "http://127.0.0.1:8000"
