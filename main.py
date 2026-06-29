@@ -1,5 +1,6 @@
 # main.py
-"""Wires routes and bootstraps the database on startup. Run with: uvicorn main:app --reload"""
+"""FastAPI application factory: wires routes and bootstraps the database on startup.
+Run with: uvicorn main:app --reload"""
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from bot.api.routes import router
@@ -14,7 +15,7 @@ async def lifespan(app: FastAPI):
     Base.metadata.create_all(bind=engine)
     with SessionLocal() as db:
         seed_products(db)
-    yield                       # Pause while app is active
+    yield
 
 
 app = FastAPI(title="Chatbot de Pedidos (Agente)", lifespan=lifespan)
