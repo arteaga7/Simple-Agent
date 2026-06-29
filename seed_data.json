@@ -1,0 +1,6 @@
+[
+  { "name": "saco", "price": 450, "stock_quantity": 20, "description": "Saco formal" },
+  { "name": "cinturón", "price": 90, "stock_quantity": 60, "description": "Cinturón de piel" },
+  { "name": "calcetines", "price": 35, "stock_quantity": 200, "description": "Par de calcetines" },
+  { "name": "zapatos", "price": 380, "stock_quantity": 25, "description": "Zapatos de vestir" }
+]
