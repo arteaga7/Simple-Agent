@@ -2,6 +2,7 @@
 from functools import lru_cache
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from bot.prompts import SYSTEM_PROMPT as DEFAULT_SYSTEM_PROMPT
+import os
 
 
 class Settings(BaseSettings):
@@ -14,11 +15,18 @@ class Settings(BaseSettings):
     system_prompt: str = DEFAULT_SYSTEM_PROMPT
     max_agent_iters: int = 5
 
-    # Database
-    database_url: str = "postgresql+psycopg://chatbot:chatbot@localhost:5432/chatbot"
+    # Database local
+    # database_url: str = "postgresql+psycopg://chatbot:chatbot@localhost:5432/chatbot"
+
+    # Database for render.com
+    database_url: str = os.getenv(
+        "DATABASE_URL", "postgresql+psycopg://chatbot:chatbot@localhost:5432/chatbot")
 
     # Streamlit client -> API base URL
-    api_url: str = "http://127.0.0.1:8000"
+    # api_url: str = "http://127.0.0.1:8000"
+
+    # API for render.com
+    api_url: str = os.getenv("API_URL", "http://127.0.0.1:8000")
 
 
 @lru_cache
