@@ -1,12 +1,13 @@
-services:
-  # 1. El servicio de la Base de Datos (Render creará una instancia real de Postgres automáticamente)
-  - type: database
-    name: chatbot-db
+# 1. Definición de la Base de Datos Administrada
+databases:
+  - name: chatbot-db
     databaseName: chatbot
     user: chatbot
-    plan: free # Plan gratuito
+    plan: free
 
-  # 2. Tu API de FastAPI
+# 2. Definición de tus Servicios de Aplicación (API y UI)
+services:
+  # Tu API de FastAPI
   - type: web
     name: chatbot-api
     env: docker
@@ -18,11 +19,11 @@ services:
           name: chatbot-db
           property: connectionString
 
-  # 3. Tu Interfaz de Streamlit
+  # Tu Interfaz de Streamlit
   - type: web
     name: chatbot-ui
     env: docker
-    dockerfilePath: ./Dockerfile # Render usará este Dockerfile
+    dockerfilePath: ./Dockerfile
     dockerCommand: streamlit run app.py --server.port $PORT --server.address 0.0.0.0
     plan: free
     envVars:
