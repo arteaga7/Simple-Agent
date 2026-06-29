@@ -1,6 +1,8 @@
 """The agent tool-calling loop: the heart that turns this from a chatbot into an agent."""
 import json
+
 from sqlalchemy.orm import Session
+
 from bot.agent import llm
 from bot.agent.memory import append_messages, load_messages
 from bot.config import get_settings
@@ -18,6 +20,7 @@ def _run_tool(name: str, arguments, db: Session, session_id: str) -> dict:
 
 def run_agent(db: Session, session_id: str, user_message: str) -> str:
     """Drive a full agent turn: reason, call tools as needed, return the final reply.
+
     The complete conversation (including assistant tool_calls and tool results) is
     loaded from and persisted back to Postgres so memory survives restarts.
     """
@@ -40,8 +43,7 @@ def run_agent(db: Session, session_id: str, user_message: str) -> str:
             break
 
         for call in assistant.tool_calls:
-            result = _run_tool(call.function.name,
-                               call.function.arguments, db, session_id)
+            result = _run_tool(call.function.name, call.function.arguments, db, session_id)
             tool_msg = {
                 "role": "tool",
                 "tool_call_id": call.id,
