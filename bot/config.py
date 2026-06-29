@@ -4,6 +4,18 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 from bot.prompts import SYSTEM_PROMPT as DEFAULT_SYSTEM_PROMPT
 import os
 
+# For render
+raw_url = os.getenv("DATABASE_URL")
+
+if raw_url:
+    if raw_url.startswith("postgres://"):
+        raw_url = raw_url.replace("postgres://", "postgresql://", 1)
+    if "postgresql://" in raw_url and "+psycopg" not in raw_url:
+        raw_url = raw_url.replace("postgresql://", "postgresql+psycopg://", 1)
+    DATABASE_URL_PROD = raw_url
+else:
+    DATABASE_URL_PROD = "postgresql+psycopg://chatbot:chatbot@localhost:5432/chatbot"
+
 
 class Settings(BaseSettings):
     """All runtime configuration. Values come from the environment or a local .env file."""
@@ -19,29 +31,17 @@ class Settings(BaseSettings):
     # database_url: str = "postgresql+psycopg://chatbot:chatbot@localhost:5432/chatbot"
 
     # Database for render.com
-    # Obtener la URL inyectada por Render de manera dinámica
-    raw_db_url = os.getenv("DATABASE_URL")
-
-    if raw_db_url:
-        # 1. Render usa postgres:// pero SQLAlchemy requiere postgresql://
-        if raw_db_url.startswith("postgres://"):
-            raw_db_url = raw_db_url.replace("postgres://", "postgresql://", 1)
-
-        # 2. Forzar explícitamente el driver moderno psycopg (Psycopg 3) si no está especificado
-        if "postgresql://" in raw_db_url and "+psycopg" not in raw_db_url:
-            raw_db_url = raw_db_url.replace(
-                "postgresql://", "postgresql+psycopg://", 1)
-
-        database_url = raw_db_url
-    else:
-        # Respaldo local si no hay variable de entorno
-        database_url = "postgresql+psycopg://chatbot:chatbot@localhost:5432/chatbot"
+    database_url: str = DATABASE_URL_PROD
 
     # Streamlit client -> API base URL
     # api_url: str = "http://127.0.0.1:8000"
 
     # API for render.com
     api_url: str = os.getenv("API_URL", "http://127.0.0.1:8000")
+
+    # For render
+    class Config:
+        env_file = ".env"
 
 
 @lru_cache
