@@ -2,6 +2,7 @@
 from functools import lru_cache
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from bot.prompts import SYSTEM_PROMPT as DEFAULT_SYSTEM_PROMPT
+import os
 
 
 class Settings(BaseSettings):
@@ -18,7 +19,7 @@ class Settings(BaseSettings):
     # database_url: str = "postgresql+psycopg://chatbot:chatbot@localhost:5432/chatbot"
 
     # Database render.com
-    database_url: str = "postgresql://chatbot:jlVPBXLMKOekTgXpHCbkZB5iCD1ml6CD@dpg-d90ub4e8bjmc739hjm00-a.oregon-postgres.render.com/chatbot_jmfh"
+    database_url: str = os.getenv("DATABASE_URL")
 
     # Streamlit client -> API base URL
     api_url: str = "http://127.0.0.1:8000"
