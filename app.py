@@ -12,11 +12,13 @@ API_URL = os.getenv("API_URL", "http://127.0.0.1:8000")
 
 def send_message(message: str):
     url = f"{API_URL}/chat"
-    payload = {"message": message, "session_id": st.session_state["session_id"]}
+    payload = {"message": message,
+               "session_id": st.session_state["session_id"]}
     headers = {"Content-Type": "application/json"}
 
     try:
-        response = requests.post(url, json=payload, headers=headers, timeout=60)
+        response = requests.post(
+            url, json=payload, headers=headers, timeout=60)
     except requests.RequestException as exc:
         st.error(f"⚠️ No se pudo conectar con el servidor: {exc}")
         return
@@ -38,7 +40,8 @@ if "session_id" not in st.session_state:
 if "chat_history" not in st.session_state:
     st.session_state["chat_history"] = []
 
-st.set_page_config(page_title="Chatbot Pedidos", page_icon="🛒", layout="centered")
+st.set_page_config(page_title="Chatbot Pedidos",
+                   page_icon="🛒", layout="centered")
 st.title("💬 Chatbot de pedidos")
 st.subheader("Haga sus pedidos")
 
