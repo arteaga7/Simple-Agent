@@ -19,8 +19,23 @@ class Settings(BaseSettings):
     # database_url: str = "postgresql+psycopg://chatbot:chatbot@localhost:5432/chatbot"
 
     # Database for render.com
-    database_url: str = os.getenv(
-        "DATABASE_URL", "postgresql+psycopg://chatbot:chatbot@localhost:5432/chatbot")
+    # Obtener la URL inyectada por Render de manera dinámica
+    raw_db_url = os.getenv("DATABASE_URL")
+
+    if raw_db_url:
+        # 1. Render usa postgres:// pero SQLAlchemy requiere postgresql://
+        if raw_db_url.startswith("postgres://"):
+            raw_db_url = raw_db_url.replace("postgres://", "postgresql://", 1)
+
+        # 2. Forzar explícitamente el driver moderno psycopg (Psycopg 3) si no está especificado
+        if "postgresql://" in raw_db_url and "+psycopg" not in raw_db_url:
+            raw_db_url = raw_db_url.replace(
+                "postgresql://", "postgresql+psycopg://", 1)
+
+        database_url = raw_db_url
+    else:
+        # Respaldo local si no hay variable de entorno
+        database_url = "postgresql+psycopg://chatbot:chatbot@localhost:5432/chatbot"
 
     # Streamlit client -> API base URL
     # api_url: str = "http://127.0.0.1:8000"
