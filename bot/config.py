@@ -22,7 +22,10 @@ class Settings(BaseSettings):
     database_url: str = os.getenv("DATABASE_URL")
 
     # Streamlit client -> API base URL
-    api_url: str = "http://127.0.0.1:8000"
+    # api_url: str = "http://127.0.0.1:8000"
+
+    # Streamlit client -> API base URL, FOR RENDER.COM
+    api_url: str = os.getenv("API_URL")
 
 
 @lru_cache
