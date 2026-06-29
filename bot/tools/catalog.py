@@ -20,14 +20,7 @@ def get_price(db: Session, product_name: str) -> dict:
     }
 
 
-def search_products(db: Session, query: str) -> dict:
-    """Search the catalog by name or description (substring, case-insensitive)."""
-    pattern = f"%{query.strip()}%"
-    products = db.scalars(
-        select(Product)
-        .where(or_(Product.name.ilike(pattern), Product.description.ilike(pattern)))
-        .order_by(Product.name)
-    ).all()
+def _serialize(products) -> dict:
     return {
         "count": len(products),
         "results": [
@@ -40,3 +33,27 @@ def search_products(db: Session, query: str) -> dict:
             for p in products
         ],
     }
+
+
+def list_products(db: Session) -> dict:
+    """Return the entire catalog. Use this to answer '¿qué productos venden?'."""
+    products = db.scalars(select(Product).order_by(Product.name)).all()
+    return _serialize(products)
+
+
+def search_products(db: Session, query: str = "") -> dict:
+    """Search the catalog by name or description (substring, case-insensitive).
+
+    A blank query lists the whole catalog, so the model can enumerate products
+    even when the customer doesn't name a specific one.
+    """
+    query = (query or "").strip()
+    if not query:
+        return list_products(db)
+    pattern = f"%{query}%"
+    products = db.scalars(
+        select(Product)
+        .where(or_(Product.name.ilike(pattern), Product.description.ilike(pattern)))
+        .order_by(Product.name)
+    ).all()
+    return _serialize(products)

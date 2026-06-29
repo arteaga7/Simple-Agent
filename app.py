@@ -7,7 +7,20 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-API_URL = os.getenv("API_URL", "http://127.0.0.1:8000")
+# API base URL. On Render this is injected from the API service (just its host),
+# so default the scheme to https when none is given.
+API_URL = os.getenv("API_URL", "http://127.0.0.1:8000").rstrip("/")
+if not API_URL.startswith(("http://", "https://")):
+    API_URL = "https://" + API_URL
+
+
+def _md_safe(text: str) -> str:
+    """Escape '$' so Streamlit's markdown doesn't render prices as LaTeX math.
+
+    Without this, a reply like "camisas a $100 ... corbatas a $75" has its first
+    pair of '$' treated as a math span, mangling the text into a formula.
+    """
+    return (text or "").replace("$", r"\$")
 
 
 def send_message(message: str):
@@ -52,7 +65,7 @@ if user_input:
 for sender, text in st.session_state["chat_history"]:
     if sender == "Usuario":
         with st.chat_message("user", avatar="🧑"):
-            st.markdown(text)
+            st.markdown(_md_safe(text))
     else:
         with st.chat_message("assistant", avatar="🤖"):
-            st.markdown(text)
+            st.markdown(_md_safe(text))

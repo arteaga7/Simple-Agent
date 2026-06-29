@@ -3,7 +3,7 @@ uvicorn[standard]
 requests
 python-dotenv
 streamlit
-groq
+openai
 sqlalchemy
 psycopg[binary]
 pydantic-settings
