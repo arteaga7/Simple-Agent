@@ -4,6 +4,9 @@ A small **tool-calling agent** that takes and validates customer orders against 
 catalog (stored in a database). Sebastián (the agent) looks up prices and stock **live from PostgreSQL** via tools,
 validates requests, and persists confirmed orders. **Gemini API Key** is needed.
 
+The Agent is deployed in:
+https://simple-agent-6.onrender.com
+
 ## ✨ Details
 
 - **Agent loop** (not a single LLM call): the model decides which tools to call, the server
@@ -45,7 +48,6 @@ Simple-Agent/
    ```
 
 ## 🚀 Run with Docker (recommended)
-
 1. Clone and create .env file, as explained in 'Configuration' section.
 2. Start everything (Postgres + API + Streamlit UI):
    ```bash
@@ -58,7 +60,6 @@ Simple-Agent/
 > Postgres on 5432), e.g. `psql -h localhost -p 5433 -U chatbot chatbot`.
 
 ## 🧪 Quick API check
-
   ```bash
   curl localhost:8000/health
   # {"status":"ok"}
@@ -69,7 +70,6 @@ Simple-Agent/
   ```
 
 ## 💻 Local dev (without Docker)
-
 Needs a running PostgreSQL. Point `DATABASE_URL` at it (e.g.
 `postgresql+psycopg://chatbot:chatbot@localhost:5432/chatbot`).
 
@@ -101,7 +101,7 @@ If the agent responses with "Lo siento ..." or "Intentalo ...", as shown in Fig.
 ![alt text](<img/c4.png>)
 Fig. 4.
 
-In Fig. 5 shows the console result of a token ran out problem.
+Fig. 5 shows the console result of a token ran out problem.
 ![alt text](<img/c5.png>)
 Fig. 5.
 
