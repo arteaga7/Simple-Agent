@@ -9,7 +9,7 @@ load_dotenv()
 
 # API base URL. On Render this is injected from the API service (just its host),
 # so default the scheme to https when none is given.
-API_URL = os.getenv("API_URL", "http://127.0.0.1:8000").rstrip("/")
+API_URL = os.getenv("API_URL", "https://simple-agent.onrender.com").rstrip("/")
 if not API_URL.startswith(("http://", "https://")):
     API_URL = "https://" + API_URL
 

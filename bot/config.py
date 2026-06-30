@@ -1,6 +1,6 @@
 """Centralized settings, loaded from environment / .env via pydantic-settings."""
 from functools import lru_cache
-
+import os
 from pydantic import field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
@@ -20,10 +20,13 @@ class Settings(BaseSettings):
 
     # Database — read from the DATABASE_URL env var (Render/Docker set it);
     # falls back to a local Postgres for bare `uvicorn` runs.
-    database_url: str = "postgresql+psycopg://chatbot:chatbot@localhost:5432/chatbot"
+    # database_url: str = "postgresql+psycopg://chatbot:chatbot@localhost:5432/chatbot"
+
+    # Database for render.com
+    database_url: str = os.getenv("DATABASE_URL")
 
     # Streamlit client -> API base URL (the UI reads API_URL from the env in app.py).
-    api_url: str = "http://127.0.0.1:8000"
+    api_url: str = "https://simple-agent.onrender.com"
 
     @field_validator("database_url")
     @classmethod
