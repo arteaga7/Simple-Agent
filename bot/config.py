@@ -3,7 +3,6 @@ from functools import lru_cache
 import os
 from pydantic import field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
-
 from bot.prompts import SYSTEM_PROMPT as DEFAULT_SYSTEM_PROMPT
 
 
@@ -18,12 +17,11 @@ class Settings(BaseSettings):
     system_prompt: str = DEFAULT_SYSTEM_PROMPT
     max_agent_iters: int = 5
 
-    # Database — read from the DATABASE_URL env var (Render/Docker set it);
-    # falls back to a local Postgres for bare `uvicorn` runs.
-    # database_url: str = "postgresql+psycopg://chatbot:chatbot@localhost:5432/chatbot"
+    # Local Database
+    database_url: str = "postgresql+psycopg://chatbot:chatbot@localhost:5432/chatbot"
 
-    # Database for render.com
-    database_url: str = os.getenv("DATABASE_URL")
+    # Database from render.com
+    # database_url: str = os.getenv("DATABASE_URL")
 
     # Streamlit client -> API base URL (the UI reads API_URL from the env in app.py).
     api_url: str = "http://localhost:8000"
