@@ -26,7 +26,7 @@ class Settings(BaseSettings):
     database_url: str = os.getenv("DATABASE_URL")
 
     # Streamlit client -> API base URL (the UI reads API_URL from the env in app.py).
-    api_url: str = "https://simple-agent.onrender.com"
+    api_url: str = "https://simple-agent-6.onrender.com"
 
     @field_validator("database_url")
     @classmethod
